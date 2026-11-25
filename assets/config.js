@@ -1,6 +1,6 @@
-/* AMORA — настройки подключения (рабочая версия). */
+/* AMORA — настройки сайта. */
 window.AMORA_CONFIG = {
-  // Вставьте объект firebaseConfig из Firebase Console → Project settings → Your apps → Web app
+  // Подключение к серверу
   firebase: {
     apiKey: "AIzaSyCyRSjgqop_7gAvLKDimF9yrQh9NLh9Fek",
     authDomain: "amora-kapan.firebaseapp.com",
@@ -9,13 +9,12 @@ window.AMORA_CONFIG = {
     messagingSenderId: "303981555117",
     appId: "1:303981555117:web:91e3d7aa391361b518c524"
   },
-  // Ключ сайта reCAPTCHA v3 для Firebase App Check (защита базы от ботов). Пусто — App Check выключен.
+  // Защита от ботов (необязательно)
   appCheckKey: "",
-  // Адрес Cloudflare Worker для Telegram, напр. "https://amora-bot.<аккаунт>.workers.dev"
+  // Telegram-уведомления
   telegramWorker: "",
-  // Имя Telegram-бота без @, напр. "amora_kapan_bot"
   telegramBot: "",
-  // Адрес сайта — используется в QR-кодах столов
+  // Адрес сайта (QR-коды столов)
   siteUrl: "https://amora.am/",
   contact: {
     phone: "+374 94 410 140",
