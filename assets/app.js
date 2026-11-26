@@ -418,7 +418,7 @@ let staffAuthed=false,pin='',staffUser=null;
 function route(){const h=location.hash.replace('#','');
   if(ENTRY==='admin'){view.mode='staff'}
   else if(h==='staff'&&ENTRY==='demo'){view.mode='staff'}
-  else if(/^table-\d+/.test(h)){const p=h.split('-');view.mode='table';view.table=+p[1];view.tkey=p[2]||'';view.ctype='table'}
+  else if(/^table-\d+/.test(h)){const p=h.split('-');view.mode='table';view.table=+p[1];view.tkey=p[2]||'';view.ctype='table';if(!L.langPicked&&!URLLANG&&L.lang!=='hy'){L.lang='hy';saveL()}}
   else{view.mode='guest';view.table=null;if(view.ctype==='table')view.ctype='delivery'}
   closeAll();renderAll();window.scrollTo(0,0)}
 window.addEventListener('hashchange',route);
@@ -1225,7 +1225,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest('[data-stop]')&&a==='open')return;
   switch(a){
     case 'home':e.preventDefault();go('');break;
-    case 'lang':L.lang=el.dataset.l;saveL();renderAll();break;
+    case 'lang':L.lang=el.dataset.l;L.langPicked=true;saveL();renderAll();break;
     case 'cart':view.step='cart';openDrawer('cart');break;
     case 'mine':openDrawer('mine');break;
     case 'track':view.trackId=id;openDrawer('track');break;
