@@ -13,6 +13,8 @@ function sortKeys(x) {
   return x;
 }
 const J = x => JSON.stringify(sortKeys(x ?? null));
+// Логин сотрудника: можно вводить просто имя латиницей — к нему дописывается @amora.am (ящик не нужен)
+const staffLogin = e => { e = String(e || '').trim().toLowerCase(); return e.includes('@') ? e : e + '@amora.am'; };
 const clean = x => JSON.parse(JSON.stringify(x ?? null));
 const ym = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
 const prevYm = () => { const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - 1); return ym(d); };
@@ -194,7 +196,7 @@ export async function start(cfg, api, entry) {
       if (d.exists()) { const c = S().customers = S().customers || {}; c[id] = Object.assign(c[id] || {}, d.data()); mark('customers/' + id, d.data()); }
     },
     async login(email, pw) {
-      const cr = await au.signInWithEmailAndPassword(auth, email, pw);
+      const cr = await au.signInWithEmailAndPassword(auth, staffLogin(email), pw);
       const sd = await getDoc(doc(db, 'staff', cr.user.uid));
       if (!sd.exists()) { await au.signOut(auth); throw new Error('not-staff'); }
     },
@@ -204,6 +206,7 @@ export async function start(cfg, api, entry) {
       const sec = initializeApp(cfg.firebase, 'staff-' + Date.now());
       try {
         const sa = au.getAuth(sec);
+        email = staffLogin(email);
         const cr = await au.createUserWithEmailAndPassword(sa, email, pw);
         await setDoc(doc(db, 'staff', cr.user.uid), { name, role, email });
         await au.signOut(sa);
