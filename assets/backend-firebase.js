@@ -35,7 +35,7 @@ export async function start(cfg, api, entry) {
   const unsubs = { pub: [], role: [] };
   let staff = null, uid = null, ready = false, warned = false;
   const S = () => api.getS();
-  const warn = e => { console.warn('[AMORA]', e && (e.code || e.message) || e); if (!warned) { warned = true; api.toast('Нет доступа к базе: ' + ((e && e.code) || 'ошибка')); setTimeout(() => warned = false, 8000); } };
+  const warn = e => { console.warn('[AMORA]', e && (e.code || e.message) || e); if (!warned) { warned = true; api.toast(staff ? 'Нет доступа к базе: ' + ((e && e.code) || 'ошибка') : (api.guestErr ? api.guestErr() : 'Не получилось отправить — попробуйте ещё раз')); setTimeout(() => warned = false, 8000); } };
   const mark = (path, data) => synced.set(path, J(data));
   const listen = (bucket, ref, fn) => unsubs[bucket].push(onSnapshot(ref, fn, warn));
   const changed = () => api.changed();
