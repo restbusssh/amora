@@ -12,8 +12,8 @@ window.AMORA_CONFIG = {
   // Защита от ботов (необязательно)
   appCheckKey: "",
   // Telegram-уведомления
-  telegramWorker: "",
-  telegramBot: "",
+  telegramWorker: "https://amora-bot.rest-buss-sh.workers.dev",
+  telegramBot: "amora_kapan_bot",
   // Адрес сайта (QR-коды столов)
   siteUrl: "https://amora.am/",
   contact: {
