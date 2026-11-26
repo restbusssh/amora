@@ -161,7 +161,13 @@ export async function start(cfg, api, entry) {
     } else {
       // менеджер: оперативные настройки приёма заказов (правила пропустят только эти поля)
       if (role === 'manager') { const was = synced.has('config/settings') ? JSON.parse(synced.get('config/settings')) : null; if (was) { const ops = {}; ['delivery', 'pickup', 'tables', 'extra'].forEach(k => { if (was[k] !== s.settings[k]) ops[k] = s.settings[k]; }); if (Object.keys(ops).length) { synced.set('config/settings', J(Object.assign({}, was, ops))); setDoc(doc(db, 'config', 'settings'), ops, { merge: true }).catch(warn); } } }
-      // остальные роли могут менять только наличие блюд
+      // менеджер ведёт меню: цены, описания, фото, новые блюда, стоп-лист
+      if (role === 'manager') {
+        write('config/added', { items: s.added || [] });
+        Object.entries(s.menu).forEach(([id, m]) => write('menu/' + id, m));
+        return;
+      }
+      // повар и бармен могут менять только наличие блюд
       Object.entries(s.menu).forEach(([id, m]) => { const p = 'menu/' + id; const was = synced.has(p) ? JSON.parse(synced.get(p)) : null;
         // правила пропустят только поле avail (+ dep при создании) и только для своего отдела
         if (was && was.avail !== m.avail) { synced.set(p, J(Object.assign({}, was, { avail: m.avail }))); setDoc(doc(db, 'menu', id), { avail: m.avail }, { merge: true }).catch(warn); }
