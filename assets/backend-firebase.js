@@ -167,6 +167,8 @@ export async function start(cfg, api, entry) {
       if (role === 'manager') {
         write('config/added', { items: s.added || [] });
         Object.entries(s.menu).forEach(([id, m]) => write('menu/' + id, m));
+        // удаление сотрудников (правила не дадут тронуть администратора)
+        for (const p of [...synced.keys()]) { const [c, id] = p.split('/'); if (c === 'staff' && !(s.staff || []).some(x => x.id === id)) { synced.delete(p); deleteDoc(doc(db, 'staff', id)).catch(warn); } }
         return;
       }
       // повар и бармен могут менять только наличие блюд
